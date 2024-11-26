@@ -1,0 +1,150 @@
+<html>
+<head>
+    <title>Cryptocurrency App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/react/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            background-color: #1a1a1a;
+            color: #ffffff;
+            font-family: 'Arial', sans-serif;
+        }
+        .header {
+            background-color: #4a4a4a;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .header img {
+            width: 40px;
+            height: 40px;
+        }
+        .header h1 {
+            font-size: 1.5rem;
+            margin-left: 10px;
+        }
+        .crypto-list {
+            margin: 20px 0;
+        }
+        .crypto-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 2px 0;
+            border-bottom: 1px solid #333;
+        }
+        .crypto-item img {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+        }
+        .crypto-item .crypto-info {
+            display: flex;
+            align-items: center;
+        }
+        .crypto-item .crypto-info div {
+            margin-left: 10px;
+        }
+        .crypto-item .crypto-info div span {
+            display: block;
+        }
+        .crypto-item .crypto-info div span:first-child {
+            font-size: 1rem;
+        }
+        .crypto-item .crypto-info div span:last-child {
+            font-size: 0.875rem;
+            color: #888;
+        }
+        .crypto-item .crypto-prices {
+            text-align: right;
+            margin-right: 20px; /* Adjusted margin to move prices and percentages to the left */
+        }
+        .crypto-item .crypto-prices span:first-child {
+            display: block;
+            font-size: 1.25rem;
+        }
+        .crypto-item .crypto-prices span:last-child {
+            font-size: 0.875rem;
+        }
+        .footer {
+            text-align: center;
+            padding: 20px 0;
+            font-size: 0.875rem;
+        }
+        .footer a {
+            color: #ff0000;
+            text-decoration: none;
+        }
+        .choose-crypto {
+            text-align: left;
+            margin-left: 20px;
+            font-size: 1rem;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        function App() {
+            const cryptocurrencies = [
+                { name: 'Tether', symbol: 'USDT', price: '1.07', change: '-0.51%', logo: 'https://placehold.co/40x40?text=Tether' },
+                { name: 'The Open Network', symbol: 'TON', price: '6.321', change: '+22.12%', logo: 'https://placehold.co/40x40?text=TON' },
+                { name: 'Solana', symbol: 'SOL', price: '29.07', change: '-0.51%', logo: 'https://placehold.co/40x40?text=Solana' },
+                { name: 'Tron', symbol: 'TRX', price: '6.321', change: '+22.12%', logo: 'https://placehold.co/40x40?text=Tron' },
+                { name: 'USD Coin', symbol: 'USDC', price: '6.321', change: '+22.12%', logo: 'https://placehold.co/40x40?text=USDC' },
+                { name: 'Binance Coin', symbol: 'BNB', price: '29.07', change: '-0.51%', logo: 'https://placehold.co/40x40?text=BNB' },
+                { name: 'Bitcoin', symbol: 'BTC', price: '29.07', change: '-0.51%', logo: 'https://placehold.co/40x40?text=Bitcoin' },
+                { name: 'Litecoin', symbol: 'LTC', price: '29.07', change: '-0.51%', logo: 'https://placehold.co/40x40?text=Litecoin' },
+                { name: 'Ethereum', symbol: 'ETH', price: '6.321', change: '+22.12%', logo: 'https://placehold.co/40x40?text=Ethereum' },
+                { name: 'Avalanche', symbol: 'AVAX', price: '29.07', change: '-78.51%', logo: 'https://placehold.co/40x40?text=Avalanche' },
+            ];
+
+            return (
+                <div>
+                    <header className="header">
+                        <div className="flex items-center">
+                            <img src="https://placehold.co/40x40?text=Logo" alt="App Logo" />
+                            <h1>APP</h1>
+                        </div>
+                        <i className="fas fa-bars"></i>
+                    </header>
+                    <main className="container mx-auto px-4">
+                        <h2 className="choose-crypto">CHOOSE CRYPTOCURRENCY</h2>
+                        <div className="crypto-list">
+                            {cryptocurrencies.map((crypto, index) => (
+                                <div key={index} className="crypto-item">
+                                    <div className="crypto-info flex items-center">
+                                        <img src={crypto.logo} alt={`${crypto.name} logo`} />
+                                        <div>
+                                            <span>{crypto.name}</span>
+                                            <span>{crypto.symbol}</span>
+                                        </div>
+                                    </div>
+                                    <div className="crypto-prices">
+                                        <span>{crypto.price}</span>
+                                        <span style={{ color: crypto.change.startsWith('+') ? 'green' : 'red' }}>{crypto.change}</span>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </main>
+                    <footer className="footer">
+                        <p>Copyright © 2024 Soumo All Rights Reserved</p>
+                        <p>
+                            <a href="#">Privacy Policy</a> | <a href="#">Terms & Conditions</a>
+                        </p>
+                    </footer>
+                </div>
+            );
+        }
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>
