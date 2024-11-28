@@ -1,0 +1,134 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PayMe</title>
+    <meta name="description" content="Crypto PayMe by Soumo's Charity is a platform dedicated to accepting cryptocurrency donations for charitable causes. Securely donate in crypto to support various charitable initiatives and help make a difference today.">
+    <link rel="icon" href="https://i.ibb.co/vv0T2TB/binance-bnb-crypto-currency-themed-banner-vector-38039963.jpg" />
+    <script src="https://unpkg.com/react/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></link>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+
+        body {
+            background-color: #121212;
+            color: white;
+            font-family: 'Outfit', Arial, sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const App = () => {
+            const [showModal, setShowModal] = React.useState(false);
+            const [cryptoData, setCryptoData] = React.useState({});
+
+            React.useEffect(() => {
+                const apiUrl = "https://api.coingecko.com/api/v3/simple/price?ids=tether,the-open-network,solana,tron,usd-coin,binancecoin,bitcoin,litecoin,ethereum,avalanche-2&vs_currencies=usd&include_24hr_change=true";
+
+                const fetchCryptoData = () => {
+                    fetch(apiUrl)
+                        .then(response => response.json())
+                        .then(data => setCryptoData(data))
+                        .catch(error => console.error('Error fetching data:', error));
+                };
+
+                fetchCryptoData();
+                const intervalId = setInterval(fetchCryptoData, 30000);
+
+                return () => clearInterval(intervalId);
+            }, []);
+
+            const cryptocurrencies = [
+                { name: 'Tether', id: 'tether', symbol: 'USDT', icon: 'https://placehold.co/32x32?text=Tether&bg=green&color=white' },
+                { name: 'The Open Network', id: 'the-open-network', symbol: 'TON', icon: 'https://placehold.co/32x32?text=TON&bg=blue&color=white' },
+                { name: 'Solana', id: 'solana', symbol: 'SOL', icon: 'https://placehold.co/32x32?text=Solana&bg=purple&color=white' },
+                { name: 'Tron', id: 'tron', symbol: 'TRX', icon: 'https://placehold.co/32x32?text=Tron&bg=red&color=white' },
+                { name: 'USD Coin', id: 'usd-coin', symbol: 'USDC', icon: 'https://placehold.co/32x32?text=USDC&bg=blue&color=white' },
+                { name: 'Binance Coin', id: 'binancecoin', symbol: 'BNB', icon: 'https://placehold.co/32x32?text=BNB&bg=yellow&color=black' },
+                { name: 'Bitcoin', id: 'bitcoin', symbol: 'BTC', icon: 'https://placehold.co/32x32?text=BTC&bg=orange&color=white' },
+                { name: 'Litecoin', id: 'litecoin', symbol: 'LTC', icon: 'https://placehold.co/32x32?text=LTC&bg=gray&color=white' },
+                { name: 'Ethereum', id: 'ethereum', symbol: 'ETH', icon: 'https://placehold.co/32x32?text=ETH&bg=blue&color=white' },
+                { name: 'Avalanche', id: 'avalanche-2', symbol: 'AVAX', icon: 'https://placehold.co/32x32?text=AVAX&bg=red&color=white' }
+            ];
+
+            const handleCryptoClick = () => {
+                setShowModal(true);
+                setTimeout(() => {
+                    setShowModal(false);
+                }, 2000);
+            };
+
+            return (
+                <div className="relative min-h-screen">
+                    <nav className="flex items-center justify-between w-[90vw] p-3 bg-white rounded-full max-w-lg mx-auto absolute top-8 left-1/2 transform -translate-x-1/2">
+                        <div className="flex items-center space-x-2">
+                            <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center">
+                                <i className="ion--logo-snapchat"></i>
+                            </div>
+                            <span className="font-bold">App</span>
+                        </div>
+                        <div className="flex items-center space-x-4">
+                            <button className="px-6 py-2 bg-black text-white rounded-full">UPI</button>
+                            <div className="w-8 h-8 flex items-center justify-center">
+                                <i className="fas fa-bars"></i>
+                            </div>
+                        </div>
+                    </nav>
+                    <div className="p-4 pt-28">
+                        <h2 className="text-gray-400 mb-4">CHOOSE CRYPTOCURRENCY</h2>
+                        <ul>
+                            {cryptocurrencies.map((crypto, index) => {
+                                const change = cryptoData[crypto.id]?.usd_24h_change;
+                                const usdValue = cryptoData[crypto.id]?.usd;
+                                const changeClass = change >= 0 ? 'text-green-500' : 'text-red-500';
+                                const sign = change >= 0 ? '+' : '-';
+                                return (
+                                    <li key={index} className="flex items-center justify-between py-2 border-b border-gray-700" onClick={handleCryptoClick}>
+                                        <div className="flex items-center">
+                                            <img src={crypto.icon} alt={`${crypto.name} icon`} className="w-8 h-8 mr-4" />
+                                            <div>
+                                                <p className="text-white">{crypto.name}</p>
+                                                <p className="text-gray-400 text-sm">{crypto.symbol}</p>
+                                            </div>
+                                        </div>
+                                        <div className="text-right ml-auto mr-4">
+                                            <p className="text-white">${usdValue?.toFixed(2)}</p>
+                                            <p className={`text-sm ${changeClass}`}>{sign} {Math.abs(change).toFixed(2)}%</p>
+                                        </div>
+                                        <i className="fas fa-chevron-right text-gray-400"></i>
+                                    </li>
+                                );
+                            })}
+                        </ul>
+                        {showModal && (
+                            <div id="toast-warning" className="flex items-center w-full max-w-xs p-4 text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800 fixed top-4 left-1/2 transform -translate-x-1/2" role="alert">
+                                <div className="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-orange-500 bg-orange-100 rounded-lg dark:bg-orange-700 dark:text-orange-200">
+                                    <svg className="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM10 15a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm1-4a1 1 0 0 1-2 0V6a1 1 0 0 1 2 0v5Z"/>
+                                    </svg>
+                                    <span className="sr-only">Warning icon</span>
+                                </div>
+                                <div className="ms-3 text-sm font-normal">Coming Soon!</div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            );
+        };
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+    <div class="bottom-4 text-center text-gray-400 text-sm mt-10">
+        <p>&copy; 2024 Soumo All Rights Reserved</p>
+        <p>
+            <a href="/ice/privacy.html" class="hover:underline text-red-500">Privacy Policy</a> |
+            <a href="/ice" class="hover:underline text-red-500">Terms & Conditions</a>
+        </p>
+    </div>
+</body>
+</html>
